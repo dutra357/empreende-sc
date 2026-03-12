@@ -1,0 +1,142 @@
+{
+  "info": {
+    "name": "API Empreendimentos",
+    "description": "Coleção de testes para o CRUD de Empreendimentos (Spring Boot)",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "1. Criar Empreendimento (POST)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"nomeEmpreendimento\": \"Tech Solutions Inovadora\",\n  \"nomeEmpreendedor\": \"João da Silva\",\n  \"municipio\": \"Florianópolis\",\n  \"segmento\": \"TECNOLOGIA\",\n  \"contato\": \"contato@techsolutions.com.br\",\n  \"status\": \"ATIVO\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8080/api/empreendimentos",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "empreendimentos"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "2. Listar Todos (GET)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/api/empreendimentos",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "empreendimentos"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "3. Buscar por ID (GET)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/api/empreendimentos/1",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "empreendimentos",
+            "1"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "4. Atualizar Empreendimento (PUT)",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"nomeEmpreendimento\": \"Tech Solutions Inovadora (Atualizado)\",\n  \"nomeEmpreendedor\": \"João da Silva\",\n  \"municipio\": \"Florianópolis\",\n  \"segmento\": \"TECNOLOGIA\",\n  \"contato\": \"novo.email@techsolutions.com.br\",\n  \"status\": \"INATIVO\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8080/api/empreendimentos/1",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "empreendimentos",
+            "1"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "5. Deletar Empreendimento (DELETE)",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/api/empreendimentos/1",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "empreendimentos",
+            "1"
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}
