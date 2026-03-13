@@ -1,52 +1,61 @@
 package com.dutra.empreende_sc.service;
 
+import com.dutra.empreende_sc.dtos.EmpreendimentoDtoInput;
+import com.dutra.empreende_sc.dtos.EmpreendimentoDtoOutput;
 import com.dutra.empreende_sc.entities.Empreendimento;
+import com.dutra.empreende_sc.exceptions.EntidadeNaoEncontradaException;
 import com.dutra.empreende_sc.repository.EmpreendimentoRepository;
 import com.dutra.empreende_sc.service.interfaces.EmpreendimentoService;
 
+import com.dutra.empreende_sc.service.utils.EmpreendimentoMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class EmpreendimentoServiceImpl implements EmpreendimentoService {
 
     private final EmpreendimentoRepository repository;
+    private final EmpreendimentoMapper mapper;
 
-    public EmpreendimentoServiceImpl(EmpreendimentoRepository repository) {
+    public EmpreendimentoServiceImpl(EmpreendimentoRepository repository, EmpreendimentoMapper mapper) {
         this.repository = repository;
+        this.mapper = mapper;
     }
 
     @Transactional
     @Override
-    public Empreendimento criar(Empreendimento empreendimento) {
-        return repository.save(empreendimento);
+    public EmpreendimentoDtoOutput criar(EmpreendimentoDtoInput empreendimento) {
+        Empreendimento novoEmpreendimento = mapper.toEntity(empreendimento);
+
+        return mapper.toOutput(repository.save(novoEmpreendimento));
     }
 
     @Transactional(readOnly = true)
     @Override
-    public List<Empreendimento> listarTodos() {
+    public List<EmpreendimentoDtoOutput> listarTodos() {
         return repository.findAll();
     }
 
     @Transactional(readOnly = true)
     @Override
-    public Optional<Empreendimento> buscarPorId(Long id) {
-        return repository.findById(id);
+    public EmpreendimentoDtoOutput buscarPorId(Long id) {
+        return repository.findById(id).orElseThrow(
+                () -> new EntidadeNaoEncontradaException("Empreendimento não encontrado com o id: " + id)
+        );
     }
 
     @Override
-    public Empreendimento atualizar(Long id, Empreendimento dadosAtualizados) {
+    public EmpreendimentoDtoOutput atualizar(Long id, EmpreendimentoDtoInput empreendimentoAtualizado) {
 
         return repository.findById(id).map(empreendimentoExistente -> {
-            empreendimentoExistente.setNomeEmpreendimento(dadosAtualizados.nomeEmpreendimento());
-            empreendimentoExistente.setNomeEmpreendedor(dadosAtualizados.nomeEmpreendedor());
-            empreendimentoExistente.setMunicipio(dadosAtualizados.municipio());
-            empreendimentoExistente.setSegmento(dadosAtualizados.segmento());
-            empreendimentoExistente.setContato(dadosAtualizados.contato());
-            empreendimentoExistente.setStatus(dadosAtualizados.status());
+            empreendimentoExistente.setNomeEmpreendimento(empreendimentoAtualizado.nomeEmpreendimento());
+            empreendimentoExistente.setNomeEmpreendedor(empreendimentoAtualizado.nomeEmpreendedor());
+            empreendimentoExistente.setMunicipio(empreendimentoAtualizado.municipio());
+            empreendimentoExistente.setSegmento(empreendimentoAtualizado.segmento());
+            empreendimentoExistente.setContato(empreendimentoAtualizado.contato());
+            empreendimentoExistente.setStatus(empreendimentoAtualizado.status());
             return repository.save(empreendimentoExistente);
         })
                 .orElseThrow(() -> new RuntimeException("Empreendimento não encontrado com o id: " + id));
