@@ -1,19 +1,19 @@
 package com.dutra.empreende_sc.service.interfaces;
 
-import com.dutra.empreende_sc.entities.Empreendimento;
+import com.dutra.empreende_sc.dtos.EmpreendimentoDtoInput;
+import com.dutra.empreende_sc.dtos.EmpreendimentoDtoOutput;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface EmpreendimentoService {
 
-    Empreendimento criar(Empreendimento empreendimento);
+    EmpreendimentoDtoOutput criar(EmpreendimentoDtoInput empreendimento);
 
-    List<Empreendimento> listarTodos();
+    List<EmpreendimentoDtoOutput> listarTodos();
 
-    Optional<Empreendimento> buscarPorId(Long id);
+    EmpreendimentoDtoOutput buscarPorId(Long id);
 
-    Empreendimento atualizar(Long id, Empreendimento dadosAtualizados);
+    EmpreendimentoDtoOutput atualizar(Long id, EmpreendimentoDtoInput empreendimentoAtualizado);
 
     void deletar(Long id);
 }
