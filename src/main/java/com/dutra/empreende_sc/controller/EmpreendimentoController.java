@@ -1,6 +1,8 @@
 package com.dutra.empreende_sc.controller;
 
-import com.dutra.empreende_sc.dtos.EmpreendimentoDTO;
+import com.dutra.empreende_sc.dtos.EmpreendimentoDtoInput;
+import com.dutra.empreende_sc.dtos.EmpreendimentoDtoOutput;
+import com.dutra.empreende_sc.dtos.EmpreendimentoUpdateInput;
 import com.dutra.empreende_sc.entities.Empreendimento;
 import com.dutra.empreende_sc.service.interfaces.EmpreendimentoService;
 import jakarta.validation.Valid;
@@ -22,16 +24,13 @@ public class EmpreendimentoController {
     }
 
     @PostMapping
-    public ResponseEntity<EmpreendimentoDTO> criar(@Valid @RequestBody EmpreendimentoDTO dto) {
-        Empreendimento empreendimento = converterParaEntidade(dto);
-        Empreendimento novoEmpreendimento = service.criar(empreendimento);
-
-        return new ResponseEntity<>(converterParaDTO(novoEmpreendimento), HttpStatus.CREATED);
+    public ResponseEntity<EmpreendimentoDtoOutput> criar(@Valid @RequestBody EmpreendimentoDtoInput novoEmpreendimento) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(service.criar(novoEmpreendimento));
     }
 
     @GetMapping
-    public ResponseEntity<List<EmpreendimentoDTO>> listarTodos() {
-        List<EmpreendimentoDTO> lista = service.listarTodos().stream()
+    public ResponseEntity<List<EmpreendimentoDtoInput>> listarTodos() {
+        List<EmpreendimentoDtoInput> lista = service.listarTodos().stream()
                 .map(this::converterParaDTO)
                 .collect(Collectors.toList());
 
@@ -39,21 +38,16 @@ public class EmpreendimentoController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<EmpreendimentoDTO> buscarPorId(@PathVariable Long id) {
+    public ResponseEntity<EmpreendimentoDtoInput> buscarPorId(@PathVariable Long id) {
         return service.buscarPorId(id)
                 .map(empreendimento -> ResponseEntity.ok(converterParaDTO(empreendimento)))
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<EmpreendimentoDTO> atualizar(@PathVariable Long id, @Valid @RequestBody EmpreendimentoDTO dto) {
-        try {
-            Empreendimento dadosAtualizados = converterParaEntidade(dto);
-            Empreendimento atualizado = service.atualizar(id, dadosAtualizados);
-            return ResponseEntity.ok(converterParaDTO(atualizado));
-        } catch (RuntimeException e) {
-            return ResponseEntity.notFound().build();
-        }
+    public ResponseEntity<EmpreendimentoDtoOutput> atualizar(@PathVariable Long id, @Valid @RequestBody EmpreendimentoUpdateInput dto) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(service.atualizar(id, dto));
+
     }
 
     @DeleteMapping("/{id}")
@@ -62,7 +56,7 @@ public class EmpreendimentoController {
         return ResponseEntity.noContent().build();
     }
 
-    private Empreendimento converterParaEntidade(EmpreendimentoDTO dto) {
+    private Empreendimento converterParaEntidade(EmpreendimentoDtoInput dto) {
         Empreendimento entidade = new Empreendimento();
 
         entidade.setNomeEmpreendimento(dto.nomeEmpreendimento());
@@ -74,8 +68,8 @@ public class EmpreendimentoController {
         return entidade;
     }
 
-    private EmpreendimentoDTO converterParaDTO(Empreendimento entidade) {
-        return new EmpreendimentoDTO(
+    private EmpreendimentoDtoInput converterParaDTO(Empreendimento entidade) {
+        return new EmpreendimentoDtoInput(
                 entidade.id(),
                 entidade.nomeEmpreendimento(),
                 entidade.nomeEmpreendedor(),
