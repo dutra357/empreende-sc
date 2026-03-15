@@ -25,7 +25,7 @@ public class EmpreendimentoMapper {
         );
     }
 
-    public Empreendimento toEntity(EmpreendimentoDtoInput dto) {
+    public Empreendimento montarEntidade(EmpreendimentoDtoInput dto) {
 
         if (dto == null) {
             return null;
