@@ -13,7 +13,7 @@ Neste vídeo, você encontrará:
 * **Tratamento de Erros:** Como a aplicação lida com validações e retorna erros no padrão RFC 7807 (Problem Details).
 * **Demonstração Prática:** A execução do projeto (via Docker) e o consumo dos endpoints simulando cenários reais.
 
-🔗 **[Clique aqui para assistir ao Vídeo Pitch no Google Drive](https://drive.google.com/file/d/1aBcD2eFgH3iJkL4mNoP5qRsTuVwXyZ/view?usp=sharing)**
+🔗 **[Clique aqui para assistir ao Vídeo Pitch no Google Drive](https://drive.google.com/file/d/1t8FUUZXtoxFn03DOzgLiXBu631WKbS0M/view?usp=sharing)**
 
 
 ## 🚀 Tecnologias Utilizadas
