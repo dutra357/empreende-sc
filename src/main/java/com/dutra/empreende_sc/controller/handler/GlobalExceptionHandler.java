@@ -1,5 +1,6 @@
-package com.exemplo.empreendimento.exception;
+package com.dutra.empreende_sc.controller.handler;
 
+import com.dutra.empreende_sc.exceptions.EntidadeNaoEncontradaException;
 import com.dutra.empreende_sc.exceptions.ValidacaoNegocioException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
@@ -17,7 +18,7 @@ import java.util.Map;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ProblemDetail handleValidationExceptions(MethodArgumentNotValidException ex) {
+    public ProblemDetail handleMethodArgumentNotValidException(MethodArgumentNotValidException ex) {
 
         ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(
                 HttpStatus.BAD_REQUEST,
@@ -47,6 +48,19 @@ public class GlobalExceptionHandler {
         );
         problemDetail.setTitle("Violação de Regra de Negócio");
         problemDetail.setType(URI.create("https://api.exemplo.com/erros/regra-negocio"));
+        problemDetail.setProperty("timestamp", Instant.now());
+
+        return problemDetail;
+    }
+
+    @ExceptionHandler(EntidadeNaoEncontradaException.class)
+    public ProblemDetail handleEntidadeNaoEncontradaException(EntidadeNaoEncontradaException ex) {
+        ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(
+                HttpStatus.NOT_FOUND,
+                ex.getMessage()
+        );
+        problemDetail.setTitle("Entidade não encontrada");
+        problemDetail.setType(URI.create("https://api.exemplo.com/erros/nao-encontrado"));
         problemDetail.setProperty("timestamp", Instant.now());
 
         return problemDetail;

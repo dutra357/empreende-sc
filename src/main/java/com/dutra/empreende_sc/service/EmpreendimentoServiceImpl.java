@@ -5,6 +5,7 @@ import com.dutra.empreende_sc.dtos.EmpreendimentoDtoOutput;
 import com.dutra.empreende_sc.dtos.EmpreendimentoUpdateInput;
 import com.dutra.empreende_sc.entities.Empreendimento;
 import com.dutra.empreende_sc.exceptions.EntidadeNaoEncontradaException;
+import com.dutra.empreende_sc.exceptions.ViolacaoIntegridadeReferencialException;
 import com.dutra.empreende_sc.repository.EmpreendimentoRepository;
 import com.dutra.empreende_sc.service.interfaces.EmpreendimentoService;
 
@@ -28,8 +29,8 @@ public class EmpreendimentoServiceImpl implements EmpreendimentoService {
 
     @Transactional
     @Override
-    public EmpreendimentoDtoOutput criar(EmpreendimentoDtoInput empreendimento) {
-        Empreendimento novoEmpreendimento = mapper.toEntity(empreendimento);
+    public EmpreendimentoDtoOutput criar(EmpreendimentoDtoInput empreendimentoInput) {
+        Empreendimento novoEmpreendimento = mapper.montarEntidade(empreendimentoInput);
         return mapper.toOutput(repository.save(novoEmpreendimento));
     }
 
@@ -54,7 +55,7 @@ public class EmpreendimentoServiceImpl implements EmpreendimentoService {
         Empreendimento entidade = repository.findById(id)
                 .orElseThrow(() -> new EntidadeNaoEncontradaException("Empreendimento não encontrado com o id: " + id));
 
-        updateEntityFromDto(empreendimentoAtualizado, entidade);
+        atualizaCamposDoEmpreendimento(empreendimentoAtualizado, entidade);
 
         Empreendimento entidadeSalva = repository.save(entidade);
 
@@ -65,18 +66,14 @@ public class EmpreendimentoServiceImpl implements EmpreendimentoService {
     @Override
     public void deletar(Long id) {
 
-        if (!repository.existsById(id)) {
-            throw new EntidadeNaoEncontradaException("Empreendimento não encontrado com o id: " + id);
-        }
-
         try {
             repository.deleteById(id);
         } catch (DataIntegrityViolationException e) {
-            throw new DataBaseException("Referential integrity violation.");
+            throw new ViolacaoIntegridadeReferencialException("Exclusão de entidade viola a integridade referencial do banco de dados, para ID: ." + id);
         }
     }
 
-    private void updateEntityFromDto(EmpreendimentoUpdateInput dto, Empreendimento entidade) {
+    private void atualizaCamposDoEmpreendimento(EmpreendimentoUpdateInput dto, Empreendimento entidade) {
         if (dto == null || entidade == null) {
             return;
         }
